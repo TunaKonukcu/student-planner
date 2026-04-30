@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/todoScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F6F8">
+
+    <LinearLayout
+        android:id="@+id/todoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="1000dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#F4F6F8">
+
+        <TextView
+            android:id="@+id/txtTodoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task Planner"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#1E3A5F"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter task"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnPickDate"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Choose Date"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time: 12:00"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+        <Button
+            android:id="@+id/btnPickTime"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Choose Time"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <RadioGroup
+            android:id="@+id/colorGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <RadioButton
+                android:id="@+id/colorBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blue" />
+
+            <RadioButton
+                android:id="@+id/colorGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Green" />
+
+            <RadioButton
+                android:id="@+id/colorOrange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orange" />
+
+            <RadioButton
+                android:id="@+id/colorPurple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Purple" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnAddTask"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Add Task"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:id="@+id/taskContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btnBackTodo"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Back"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+</ScrollView>

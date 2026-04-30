@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F6F8">
+
+    <LinearLayout
+        android:id="@+id/settingsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="1000dp"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/txtSettingsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#1E3A5F"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/txtBackgroundLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Background"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <RadioGroup
+            android:id="@+id/bgGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/bgLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Light" />
+
+            <RadioButton
+                android:id="@+id/bgDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dark" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/txtButtonColorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button Color"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <RadioGroup
+            android:id="@+id/buttonGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/colorBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blue" />
+
+            <RadioButton
+                android:id="@+id/colorGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Green" />
+
+            <RadioButton
+                android:id="@+id/colorPurple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Purple" />
+
+            <RadioButton
+                android:id="@+id/colorOrange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orange" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnSaveSettings"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Save Settings"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/btnBackSettings"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Back"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

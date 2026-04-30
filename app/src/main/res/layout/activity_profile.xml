@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profileScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F6F8">
+
+    <LinearLayout
+        android:id="@+id/profileLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/txtProfileTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Profile"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#1E3A5F"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/txtAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="👨"
+            android:textSize="70sp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <RadioGroup
+            android:id="@+id/avatarGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/avatarMan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Man 👨" />
+
+            <RadioButton
+                android:id="@+id/avatarWoman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Woman 👩" />
+
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/editFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full name"
+            android:inputType="textPersonName"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/editSchool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="School"
+            android:inputType="text"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/editMajor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Major"
+            android:inputType="text"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/txtSavedUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Save Profile"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/btnBackProfile"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Back"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

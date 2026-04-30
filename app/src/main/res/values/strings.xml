@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Student Planner</string>
+
+    <string name="profile_title">Student Profile</string>
+
+    <string name="profile_text">
+        Name: Tuna Yigit Konukcu\n\n
+        School: Brescia University\n\n
+        Major: Computer Science\n\n
+        Project: Student Planner\n\n
+        This app is useful because it helps students organize tasks and keep important school information in one simple place.
+    </string>
+
+    <string name="back">Back</string>
+</resources>

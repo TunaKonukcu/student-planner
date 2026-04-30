@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/aboutLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#F4F6F8">
+
+    <TextView
+        android:id="@+id/txtAboutTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About This App"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#1E3A5F"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/txtAboutBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Student Planner is a simple productivity app designed to help students organize their daily academic tasks. The app was first planned with wireframes before coding, which helped create a clear layout, simple navigation, and an easy user experience. Users can create an account, save their profile information, choose a theme, and manage tasks. The goal of this app is to make planning easier by keeping important student tools in one place. This project demonstrates basic Android development concepts such as activities, XML layouts, buttons, user input, navigation, local data storage, and user preferences."
+        android:textSize="18sp"
+        android:textColor="#333333" />
+
+    <Button
+        android:id="@+id/btnBackAbout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Back"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_button"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="30dp" />
+
+</LinearLayout>

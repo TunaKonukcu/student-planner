@@ -22,19 +22,9 @@ object ThemeHelper {
         val bg = sharedPref.getString("bg", "light")
         val btn = sharedPref.getString("btnColor", "blue")
 
-        val backgroundColor: Int
-        val textColor: Int
-        val hintColor: Int
-
-        if (bg == "dark") {
-            backgroundColor = Color.BLACK
-            textColor = Color.WHITE
-            hintColor = Color.LTGRAY
-        } else {
-            backgroundColor = Color.parseColor("#F4F6F8")
-            textColor = Color.parseColor("#111111")
-            hintColor = Color.GRAY
-        }
+        val backgroundColor = if (bg == "dark") Color.BLACK else Color.parseColor("#F4F6F8")
+        val textColor = if (bg == "dark") Color.WHITE else Color.parseColor("#111111")
+        val hintColor = if (bg == "dark") Color.LTGRAY else Color.GRAY
 
         val buttonColor = when (btn) {
             "green" -> Color.parseColor("#4CAF50")
@@ -44,8 +34,7 @@ object ThemeHelper {
         }
 
         backgroundView.setBackgroundColor(backgroundColor)
-
-        applyTextColorRecursively(backgroundView, textColor, hintColor)
+        applyTextColors(backgroundView, textColor, hintColor)
 
         titleView?.setTextColor(textColor)
 
@@ -55,20 +44,21 @@ object ThemeHelper {
         }
     }
 
-    private fun applyTextColorRecursively(view: View, textColor: Int, hintColor: Int) {
+    private fun applyTextColors(view: View, textColor: Int, hintColor: Int) {
         when (view) {
             is EditText -> {
                 view.setTextColor(textColor)
                 view.setHintTextColor(hintColor)
-                view.setBackgroundColor(Color.TRANSPARENT)
+                view.background.setTint(textColor)
             }
 
             is RadioButton -> {
                 view.setTextColor(textColor)
+                view.buttonTintList = android.content.res.ColorStateList.valueOf(textColor)
             }
 
             is Button -> {
-                // Do nothing here because button colors are handled separately
+                // Buttons handled separately
             }
 
             is TextView -> {
@@ -77,7 +67,7 @@ object ThemeHelper {
 
             is ViewGroup -> {
                 for (i in 0 until view.childCount) {
-                    applyTextColorRecursively(view.getChildAt(i), textColor, hintColor)
+                    applyTextColors(view.getChildAt(i), textColor, hintColor)
                 }
             }
         }

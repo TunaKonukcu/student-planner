@@ -1,94 +1,57 @@
 package com.jfdimarzio.studentplanner
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 
 class SettingsActivity : ComponentActivity() {
 
+    private lateinit var settingsMenuLayout: LinearLayout
+    private lateinit var settingsTitle: TextView
+    private lateinit var btnThemes: Button
+    private lateinit var btnSmsNotification: Button
+    private lateinit var btnBackSettingsMenu: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Connect this Kotlin file to activity_settings.xml
         setContentView(R.layout.activity_settings)
 
-        val bgGroup = findViewById<RadioGroup>(R.id.bgGroup)
-        val buttonGroup = findViewById<RadioGroup>(R.id.buttonGroup)
+        settingsMenuLayout = findViewById(R.id.settingsMenuLayout)
+        settingsTitle = findViewById(R.id.txtSettingsMenuTitle)
 
-        val saveButton = findViewById<Button>(R.id.btnSaveSettings)
-        val backButton = findViewById<Button>(R.id.btnBackSettings)
+        btnThemes = findViewById(R.id.btnThemes)
+        btnSmsNotification = findViewById(R.id.btnSmsNotification)
+        btnBackSettingsMenu = findViewById(R.id.btnBackSettingsMenu)
 
-        val sharedPref = getSharedPreferences("UserData", MODE_PRIVATE)
-
-        // Load saved settings
-        val savedBg = sharedPref.getString("bg", "light")
-        val savedBtn = sharedPref.getString("btnColor", "blue")
-
-        // Show saved background choice
-        if (savedBg == "dark") {
-            findViewById<RadioButton>(R.id.bgDark).isChecked = true
-        } else {
-            findViewById<RadioButton>(R.id.bgLight).isChecked = true
+        btnThemes.setOnClickListener {
+            startActivity(Intent(this, ThemeSettingsActivity::class.java))
         }
 
-        // Show saved button color choice
-        when (savedBtn) {
-            "green" -> findViewById<RadioButton>(R.id.colorGreen).isChecked = true
-            "purple" -> findViewById<RadioButton>(R.id.colorPurple).isChecked = true
-            "orange" -> findViewById<RadioButton>(R.id.colorOrange).isChecked = true
-            else -> findViewById<RadioButton>(R.id.colorBlue).isChecked = true
+        btnSmsNotification.setOnClickListener {
+            startActivity(Intent(this, SmsNotificationActivity::class.java))
         }
 
-        // Apply saved theme when settings page opens
-        applySettingsTheme()
-
-        saveButton.setOnClickListener {
-            val bg = if (bgGroup.checkedRadioButtonId == R.id.bgDark) {
-                "dark"
-            } else {
-                "light"
-            }
-
-            val btnColor = when (buttonGroup.checkedRadioButtonId) {
-                R.id.colorGreen -> "green"
-                R.id.colorPurple -> "purple"
-                R.id.colorOrange -> "orange"
-                else -> "blue"
-            }
-
-            sharedPref.edit()
-                .putString("bg", bg)
-                .putString("btnColor", btnColor)
-                .apply()
-
-            // Apply immediately after save
-            applySettingsTheme()
-
-            Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show()
-        }
-
-        backButton.setOnClickListener {
+        btnBackSettingsMenu.setOnClickListener {
             finish()
         }
+
+        applySettingsMenuTheme()
     }
 
     override fun onResume() {
         super.onResume()
-        applySettingsTheme()
+        applySettingsMenuTheme()
     }
 
-    private fun applySettingsTheme() {
+    private fun applySettingsMenuTheme() {
         ThemeHelper.applyTheme(
             this,
-            findViewById(R.id.settingsScroll),
-            null,
-            listOf(
-                findViewById(R.id.btnSaveSettings),
-                findViewById(R.id.btnBackSettings)
-            )
+            settingsMenuLayout,
+            settingsTitle,
+            listOf(btnThemes, btnSmsNotification, btnBackSettingsMenu)
         )
     }
 }

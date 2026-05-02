@@ -1,7 +1,13 @@
 package com.jfdimarzio.studentplanner
 
+import android.Manifest
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
@@ -11,10 +17,11 @@ import java.util.Calendar
 class ToDoActivity : ComponentActivity() {
 
     private lateinit var taskInput: EditText
-    private lateinit var taskContainer: LinearLayout
     private lateinit var pickDateButton: Button
     private lateinit var pickTimeButton: Button
     private lateinit var colorGroup: RadioGroup
+    private lateinit var checkSmsTask: Switch
+    private lateinit var smsTaskStatus: TextView
 
     private var selectedDate = "No date"
     private var selectedTime = "No time"
@@ -24,11 +31,16 @@ class ToDoActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
 
+        if (checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.SEND_SMS), 100)
+        }
+
         taskInput = findViewById(R.id.editTask)
-        taskContainer = findViewById(R.id.taskContainer)
         pickDateButton = findViewById(R.id.btnPickDate)
         pickTimeButton = findViewById(R.id.btnPickTime)
         colorGroup = findViewById(R.id.colorGroup)
+        checkSmsTask = findViewById(R.id.checkSmsTask)
+        smsTaskStatus = findViewById(R.id.txtSmsTaskStatus)
 
         val addButton = findViewById<Button>(R.id.btnAddTask)
         val backButton = findViewById<Button>(R.id.btnBackTodo)
@@ -37,13 +49,12 @@ class ToDoActivity : ComponentActivity() {
         val username = sharedPref.getString("username", "User") ?: "User"
         val taskKey = "tasks_$username"
 
-        val savedTasks = sharedPref.getString(taskKey, "") ?: ""
-        if (savedTasks.isNotEmpty()) {
-            tasks = savedTasks.split(";;").toMutableList()
-        }
-
+        loadTasks(taskKey)
         applySavedTheme()
-        showTasks(taskKey)
+
+        checkSmsTask.setOnCheckedChangeListener { _, isChecked ->
+            updateSmsStatus(isChecked)
+        }
 
         pickDateButton.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -86,17 +97,26 @@ class ToDoActivity : ComponentActivity() {
                     else -> "blue"
                 }
 
-                val newTask = "$taskText|$selectedDate|$selectedTime|$colorName|false"
-                tasks.add(newTask)
+                val smsChoice = checkSmsTask.isChecked
+                val newTask = "$taskText|$selectedDate|$selectedTime|$colorName|false|$smsChoice"
 
+                tasks.add(newTask)
                 saveTasks(taskKey)
-                showTasks(taskKey)
+
+                if (smsChoice) {
+                    scheduleSmsReminder(taskText)
+                }
 
                 taskInput.text.clear()
                 selectedDate = "No date"
                 selectedTime = "No time"
                 pickDateButton.text = "Choose Date"
                 pickTimeButton.text = "Choose Time"
+
+                checkSmsTask.isChecked = false
+                updateSmsStatus(false)
+
+                Toast.makeText(this, "Task saved", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Enter a task first", Toast.LENGTH_SHORT).show()
             }
@@ -114,89 +134,18 @@ class ToDoActivity : ComponentActivity() {
         val username = sharedPref.getString("username", "User") ?: "User"
         val taskKey = "tasks_$username"
 
+        loadTasks(taskKey)
+        applySavedTheme()
+    }
+
+    private fun loadTasks(taskKey: String) {
+        val sharedPref = getSharedPreferences("UserData", MODE_PRIVATE)
         val savedTasks = sharedPref.getString(taskKey, "") ?: ""
 
         tasks = if (savedTasks.isNotEmpty()) {
             savedTasks.split(";;").toMutableList()
         } else {
             mutableListOf()
-        }
-
-        applySavedTheme()
-        showTasks(taskKey)
-    }
-
-    private fun showTasks(taskKey: String) {
-        taskContainer.removeAllViews()
-
-        for (i in tasks.indices) {
-            val parts = tasks[i].split("|")
-
-            if (parts.size < 5) {
-                continue
-            }
-
-            val taskText = parts[0]
-            val date = parts[1]
-            val time = parts[2]
-            val colorName = parts[3]
-            val completed = parts[4].toBoolean()
-
-            val card = LinearLayout(this)
-            card.orientation = LinearLayout.VERTICAL
-            card.setPadding(20, 20, 20, 20)
-
-            val cardColor = when (colorName) {
-                "green" -> Color.parseColor("#DFF5E1")
-                "orange" -> Color.parseColor("#FFE5C2")
-                "purple" -> Color.parseColor("#E8D9FF")
-                else -> Color.parseColor("#DCEBFF")
-            }
-
-            card.setBackgroundColor(cardColor)
-
-            val checkBox = CheckBox(this)
-            checkBox.text = "$taskText\n$date at $time"
-            checkBox.textSize = 18f
-            checkBox.isChecked = completed
-            checkBox.setTextColor(Color.parseColor("#222222"))
-
-            checkBox.setOnCheckedChangeListener { _, isChecked ->
-                tasks[i] = "$taskText|$date|$time|$colorName|$isChecked"
-                saveTasks(taskKey)
-            }
-
-            val editButton = Button(this)
-            editButton.text = "Edit"
-
-            editButton.setOnClickListener {
-                taskInput.setText(taskText)
-                tasks.removeAt(i)
-                saveTasks(taskKey)
-                showTasks(taskKey)
-            }
-
-            val deleteButton = Button(this)
-            deleteButton.text = "Remove"
-
-            deleteButton.setOnClickListener {
-                tasks.removeAt(i)
-                saveTasks(taskKey)
-                showTasks(taskKey)
-            }
-
-            card.addView(checkBox)
-            card.addView(editButton)
-            card.addView(deleteButton)
-
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(0, 0, 0, 18)
-            card.layoutParams = params
-
-            taskContainer.addView(card)
         }
     }
 
@@ -206,6 +155,76 @@ class ToDoActivity : ComponentActivity() {
         sharedPref.edit()
             .putString(taskKey, tasks.joinToString(";;"))
             .apply()
+    }
+
+    private fun updateSmsStatus(isEnabled: Boolean) {
+        if (isEnabled) {
+            smsTaskStatus.text = "SMS ON ✅"
+            smsTaskStatus.setTextColor(Color.parseColor("#4CAF50"))
+        } else {
+            smsTaskStatus.text = "SMS OFF ❌"
+            smsTaskStatus.setTextColor(Color.parseColor("#D32F2F"))
+        }
+    }
+
+    private fun scheduleSmsReminder(taskText: String) {
+        val sharedPref = getSharedPreferences("UserData", MODE_PRIVATE)
+
+        val smsEnabled = sharedPref.getBoolean("smsEnabled", false)
+        val username = sharedPref.getString("username", "User") ?: "User"
+        val phoneNumber = sharedPref.getString("phone_$username", "") ?: ""
+
+        if (!smsEnabled) {
+            Toast.makeText(this, "SMS notifications are off in Settings", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (phoneNumber.isEmpty()) {
+            Toast.makeText(this, "Add phone number in Profile first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (selectedDate == "No date" || selectedTime == "No time") {
+            Toast.makeText(this, "Choose date and time for SMS", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val dateParts = selectedDate.split("/")
+        val timeParts = selectedTime.split(":")
+
+        val month = dateParts[0].toInt() - 1
+        val day = dateParts[1].toInt()
+        val year = dateParts[2].toInt()
+        val hour = timeParts[0].toInt()
+        val minute = timeParts[1].toInt()
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day, hour, minute, 0)
+
+        if (calendar.timeInMillis <= System.currentTimeMillis()) {
+            Toast.makeText(this, "Choose a future time for SMS", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val intent = Intent(this, SmsReminderReceiver::class.java)
+        intent.putExtra("phoneNumber", phoneNumber)
+        intent.putExtra("taskText", taskText)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            System.currentTimeMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+
+        Toast.makeText(this, "SMS reminder scheduled", Toast.LENGTH_SHORT).show()
     }
 
     private fun applySavedTheme() {
@@ -236,16 +255,37 @@ class ToDoActivity : ComponentActivity() {
         val todoScroll = findViewById<ScrollView>(R.id.todoScroll)
         val todoLayout = findViewById<LinearLayout>(R.id.todoLayout)
         val todoTitle = findViewById<TextView>(R.id.txtTodoTitle)
+        val timeLabel = findViewById<TextView>(R.id.txtTimeLabel)
+
         val addButton = findViewById<Button>(R.id.btnAddTask)
         val backButton = findViewById<Button>(R.id.btnBackTodo)
 
+        val smsChoiceLayout = findViewById<LinearLayout>(R.id.smsChoiceLayout)
+        val smsTitle = findViewById<TextView>(R.id.txtSmsReminderTitle)
+        val smsInfo = findViewById<TextView>(R.id.txtSmsReminderInfo)
+
         todoScroll.setBackgroundColor(backgroundColor)
         todoLayout.setBackgroundColor(backgroundColor)
+
         todoTitle.setTextColor(textColor)
+        timeLabel.setTextColor(textColor)
 
         taskInput.setTextColor(textColor)
         taskInput.setHintTextColor(hintColor)
         taskInput.background.setTint(textColor)
+
+        colorGroup.setBackgroundColor(backgroundColor)
+
+        for (i in 0 until colorGroup.childCount) {
+            val radioButton = colorGroup.getChildAt(i) as RadioButton
+            radioButton.setTextColor(textColor)
+            radioButton.buttonTintList = android.content.res.ColorStateList.valueOf(textColor)
+        }
+
+        smsChoiceLayout.setBackgroundColor(backgroundColor)
+        smsTitle.setTextColor(textColor)
+        smsInfo.setTextColor(textColor)
+        checkSmsTask.setTextColor(textColor)
 
         pickDateButton.background.setTint(buttonColor)
         pickTimeButton.background.setTint(buttonColor)

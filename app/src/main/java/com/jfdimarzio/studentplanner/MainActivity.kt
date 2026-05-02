@@ -17,6 +17,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var btnSettings: Button
     private lateinit var btnAbout: Button
 
+    private lateinit var btnAllTasks: Button
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,6 +32,8 @@ class MainActivity : ComponentActivity() {
         btnTodo = findViewById(R.id.btnTodo)
         btnSettings = findViewById(R.id.btnSettings)
         btnAbout = findViewById(R.id.btnAbout)
+        btnAllTasks = findViewById(R.id.btnAllTasks)
+
 
         btnProfile.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
@@ -36,6 +41,10 @@ class MainActivity : ComponentActivity() {
 
         btnTodo.setOnClickListener {
             startActivity(Intent(this, ToDoActivity::class.java))
+        }
+
+        btnAllTasks.setOnClickListener {
+            startActivity(Intent(this, AllTasksActivity::class.java))
         }
 
         btnSettings.setOnClickListener {
@@ -72,7 +81,7 @@ class MainActivity : ComponentActivity() {
             this,
             mainLayout,
             titleText,
-            listOf(btnProfile, btnTodo, btnSettings, btnAbout)
+            listOf(btnProfile, btnTodo, btnAllTasks, btnSettings, btnAbout)
         )
     }
 }

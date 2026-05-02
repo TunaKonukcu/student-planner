@@ -60,6 +60,14 @@
             android:layout_marginTop="16dp" />
 
         <EditText
+            android:id="@+id/editPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone number for SMS reminders"
+            android:inputType="phone"
+            android:layout_marginTop="10dp" />
+
+        <EditText
             android:id="@+id/editSchool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

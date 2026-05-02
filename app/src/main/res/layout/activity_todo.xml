@@ -42,7 +42,7 @@
             android:textStyle="bold"
             android:layout_marginTop="12dp" />
         <TextView
-            android:id="@+id/txtTime"
+            android:id="@+id/txtTimeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time: 12:00"
@@ -58,6 +58,54 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:layout_marginTop="12dp" />
+        <LinearLayout
+            android:id="@+id/smsChoiceLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/txtSmsReminderTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SMS Reminder"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/txtSmsReminderInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Choose if this task should send an SMS reminder later."
+                android:textSize="14sp"
+                android:textColor="#DDDDDD"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp" />
+
+            <Switch
+                android:id="@+id/checkSmsTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable SMS for this task"
+                android:textStyle="bold"
+                android:thumbTint="@color/sms_thumb"
+                android:trackTint="@color/sms_track" />
+
+            <TextView
+                android:id="@+id/txtSmsTaskStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SMS OFF ❌"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#D32F2F"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
 
         <RadioGroup
             android:id="@+id/colorGroup"
